@@ -21,12 +21,12 @@ def login():
             except ValueError:
                 print("value error")
                 a.commit()
-                print("your account sucessfully created")
+                print("your account successfully created")
                 n=2
         elif(b==2):
             try:
                 n=(0,0)
-                b=a.execute('select name,password from praveen where name=? and password=?',(input("enter the usename"),input("enter the password")))
+                b=a.execute('select name,password from praveen where username=? and password=?',(input("enter the usename"),input("enter the password")))
                 for x in b:
                     if n[0]!=0 and n[1]!=0:
                         print("login Success")
