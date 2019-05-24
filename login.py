@@ -39,7 +39,7 @@ def login():
                 n=2
         elif(b==3):
             try:
-                a.execute('update praveen set username=? where mobile=? and password=?',(input("enter the username"),input("enter the mobile"),input("enter the new password")))
+                a.execute('update praveen set username=? where password=?  and mobile=?',(input("enter the username"),input("enter the new password"),input("enter the mobile number")))
             except ValueError:
                 print("value Error")
                 a.commit()
