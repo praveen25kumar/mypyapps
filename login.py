@@ -25,10 +25,15 @@ def login():
                 n=2
         elif(b==2):
             try:
-                a.execute('update praveen set username=? where password=?',(input("enter the username"), input("enter the password")))
+                n=(0,0)
+                b=a.execute('select name,password from appa where name=? and password=?',(input("enter the usename"),input("enter the password")))
+                for x in b:
+                    if n[0]!=0 and n[1]!=0:
+                        print("login Success")
+                    else:
+                        print("invalid username or password")
             except ValueError:
-                print("value error")
-                print("login processing")
+                print("ValueError")
                 a.commit()
                 n=2
         elif(b==3):
