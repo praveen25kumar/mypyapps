@@ -28,7 +28,7 @@ def login():
                 n=(0,0)
                 b=a.execute('select username,password from praveen where username=? and password=?',(input("enter the usename"),input("enter the password")))
                 for n in b:
-                    print("checking")
+                    print("")
                 if n[0]!=0 and n[1]!=0:
                     print("login Success")
                 else:
