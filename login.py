@@ -64,6 +64,35 @@ def login():
             if i not in c and i not in x:
                 c.append(i)
                 e=m.count(i)
-        print(i,e)
+         d={}
+            for k in c:
+                d[k]=e
+        sort=sorted(d.items(),key=lambda t:t[1],reverse=False)
+        wor=[]
+        count=[]
+        v=sort[0:5]
+        xy=0
+        for r in range(5):
+            for y in range(1):
+                wor.append(v[r][y])
+                count.append(v[r][y+1])
+    filename="praveen.xlsx"      
+    workbook=xlsxwriter.Workbook(filename)                  
+    worksheet=workbook.add_worksheet("Sheet1")
+    worksheet.set_column(1,1,15)
+    b= workbook.add_format({'bold': True})
+    i= workbook.add_format({'italic': True})
+    worksheet.write('A1', 'Words', b)
+    worksheet.write('B1', 'Count', b)
+    row=1
+    col=0
+    for i in range(5):
+        worksheet.write(row,col,wor[i],i)
+        worksheet.write_number(row,col+1, count[i])
+        row+=1
+    chart=workbook.add_chart({'type':'pie'})                 
+    chart.add_series({'categories':'=Sheet1!$A$2:$A$6','values':'=Sheet1!$B$2:$B$6'})
+    worksheet.insert_chart('G5',chart)
+
 
 login()
