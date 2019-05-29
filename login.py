@@ -82,18 +82,19 @@ def login():
     worksheet=workbook.add_worksheet("Sheet1")
     worksheet.set_column(1,1,15)
     b= workbook.add_format({'bold': True})
-    i= workbook.add_format({'italic': True})
+    s= workbook.add_format({'italic': True})
     worksheet.write('A1', 'Words', b)
     worksheet.write('B1', 'Count', b)
     row=1
     col=0
     for i in range(5):
-        worksheet.write(row,col,wor[i],i)
+        worksheet.write(row,col,wor[i],s)
         worksheet.write_number(row,col+1, count[i])
         row+=1
     chart=workbook.add_chart({'type':'pie'})                 
     chart.add_series({'categories':'=Sheet1!$A$2:$A$6','values':'=Sheet1!$B$2:$B$6'})
     worksheet.insert_chart('G5',chart)
+    workbook.close()
 
 
 login()
