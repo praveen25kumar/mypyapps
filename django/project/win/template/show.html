@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<HTML>
+<head>
+<title></title>
+</head>
+<body>
+<form method='POST' action= > 
+{%csrf_token %}
+<table border=1>  
+    <thead>  
+    <tr>  
+        <th>Employee ID</th> <br> 
+        <th>Employee Name</th>  <br>
+        <th>Employee Email</th>  <br>
+        <th>Employee Contact</th>  <br>
+        <th>Actions</th>  
+    </tr>  
+    </thead>  
+    <tbody>  
+{% for ems in em %}  
+    <tr>  
+        <td>{{ ems.eid }}</td>  
+        <td>{{ ems.ename }}</td>  
+        <td>{{ ems.eemail }}</td>  
+        <td>{{ ems.econtact }}</td>  
+        <td>  
+            <a href="/edit/{{ employee.id }}"><span>Edit</span></a>  
+            <a href="/delete/{{ employee.id }}">Delete</a>  
+        </td>  
+    </tr>  
+{% endfor %}  
+    </tbody>  
+</table>  
+<br>  
+<br>  
+<center><a href="/emp">Add New Record</a></center>  
+</body>  
+</html> 
+</form>
+</body>
+</html>

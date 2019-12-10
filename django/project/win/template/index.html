@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<HTML>
+<head>
+<title></title>
+</head>
+<body>
+<form method='POST' action="/a" > 
+{%csrf_token %}
+<div>
+<h3>Employee Details</h3>
+<div>
+<p>Enter id</p>
+{{form.eid}}
+</div>
+<div>
+<p>Enter Name</p>
+{{form.ename}}
+</div>
+<div>
+<p>Enter Email</p>
+{{form.eemail}}
+</div>
+<div>
+<p>Enter Contact</p>
+{{form.econtact}}
+</div>
+</div>
+<button type="submit">Submit</button>
+</form>
+</body>
+</html>
