@@ -1,1 +1,101 @@
-cvsdvsvfv
+------------------------DUMP Query------------------
+
+
+--Exec  CampDump 'ACT FIBERNET'
+--select getdate()-
+CREATE proc [dbo].[CampDump] @Clientname nvarchar(max)
+as
+begin
+--Drop table #temp 
+
+
+select distinct VisitDate,ExternalVisitID,CollectionCentreID,CollectionCentreName into #temp from PatientVisit   with(nolock)
+where CollectionCentreName<>'' and 
+--ExternalVisitID in ('418192922365','418192909575','418192909573','418192905406','418192905390','418192905389')
+convert(date,VisitDate) Between  convert(Date,getdate()-10) and  convert(Date,getdate()-6)  and 
+ClientName='ASHOKLEYLANDLIMITED'
+ 
+
+
+Select distinct
+p.PatientNumber as PatientID,  
+pv.VisitDate  
+,p.Age  
+,p.name as PatientName  
+,Sex  
+,DOB  
+,PV.clientname
+,Pv.ReferingPhysicianName
+,PV.CollectionCentreName
+,ExternalVisitID  
+,oi.Name  
+,ID  
+,Type  
+,iv.InvestigationID  
+,InvestigationName InvestigationName  
+,isnull(Value,'') Value  
+,ReferenceRange
+,oi.Status  
+,oi.ResCaptureLoc  
+--,pv.CollectionCentreName as Location  
+into #attune  
+from OrderedInvestigations as oi With(nolock)  
+inner join patientvisit as pv With(nolock) on oi.VisitID=pv.PatientVisitId  
+inner join PatientInvestigation as piv With(nolock) on piv.patientvisitid=oi.VisitID and piv.AccessionNumber=oi.AccessionNumber  
+inner join investigationvalues as iv With(nolock) on iv.InvestigationID=piv.InvestigationID and piv.PatientVisitID=iv.PatientVisitID  
+inner join patient as p With(nolock) on p.patientid=pv.patientid   
+Where  ExternalVisitID in (select ExternalVisitID  from #temp)   
+Order by PV.VisitDate
+
+ update a set a.CollectionCentreName=b.CollectionCentreName,a.VisitDate=b.VisitDate from #attune as a  
+inner join PatientVisit as b on a.ExternalVisitID=b.ExternalVisitID  and B.refervisitid=0
+ update a set a.InvestigationName=b.InvestigationName from #attune as a  
+inner join InvestigationMaster as b on a.investigationid=b.InvestigationID  
+
+/*
+select PatientID,visitdate,Age,PatientName,Sex,DOB,clientname,ReferingPhysicianName,CollectionCentreName,ExternalVisitID,Name,ID,Type,
+InvestigationID,InvestigationName,REPLACE(REPLACE(REPLACE(dbo.[udf_StripHTML](Value), '\r\n', ''),'&nbsp;',''),'
+','') as Value
+, REPLACE(REPLACE(ReferenceRange, '\r\n',''),'
+','') as ReferenceRange,Status,ResCaptureLoc 
+into Master..DCGL_Error from #attune
+*/
+-----------------------------------------------------------------------------------------------------------------------------------  
+DECLARE @ColumnsTable TABLE ([ColumnName] VARCHAR(255));  
+INSERT INTO @ColumnsTable ([ColumnName])  
+SELECT DISTINCT '[' + CONVERT(VARCHAR(234), InvestigationName) + ']'  
+FROM   #Attune;  
+DECLARE @PivotColumns VARCHAR(MAX), @TotalColumn VARCHAR(MAX), @SQL VARCHAR(MAX);  
+SET @PivotColumns = (SELECT STUFF((SELECT DISTINCT ', ' + CONVERT(VARCHAR(255), [ColumnName])  
+                                   FROM   @ColumnsTable  
+                                   FOR XML PATH('')), 1, 2, ''));  
+SET @TotalColumn = (SELECT STUFF((SELECT DISTINCT ' + ISNULL(' + CONVERT(VARCHAR(255), [ColumnName]) + ', 0)'  
+                                  FROM   @ColumnsTable  
+                                  FOR XML PATH('')), 1, 3, ''));  
+
+								  
+----------------------------------------------------------------------------------------------------------------------------------  
+if OBJECT_ID('Master.dbo.DataAttune')>0
+Drop table Master.dbo.DataAttune 
+SET @SQL = 'SELECT * Into  Master.dbo.DataAttune  
+FROM   (  
+SELECT   
+PatientID  
+,PatientName  
+,visitdate  
+,Age  
+,Sex  
+,clientname
+,ReferingPhysicianName
+,CollectionCentreName
+,ExternalVisitID    
+,InvestigationName  
+,Value  
+--,ReferenceRange
+  FROM   #Attune) AS t  
+PIVOT (MAX([Value]  
+)  
+FOR [InvestigationName] IN (' + @PivotColumns + ')) AS p where PatientName not like ''%test%'';';  
+EXEC(@SQL); 
+select * From Master.dbo.DataAttune  
+end
