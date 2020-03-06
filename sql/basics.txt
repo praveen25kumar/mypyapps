@@ -43,7 +43,27 @@ set @a=25
  print 'the given number is not divisiable by 2'
  end
  
- -----------------------
+ -----------------------to find number divisible by 3------------------
+ 
+ declare @b1 int,@s1 int,@t1 int,@s2 int
+  set @b1=2344556
+  set @s1=1
+  set @s2=0
+  While @s1<=len(@b1)
+   begin 
+    set @t1=right(left(@b1,@s1),1)
+	 
+	set @s2= @s2 + @t1
+	set @s1=@s1+1
+  end
+  if (@s2%3=0)
+ begin
+ print convert(nvarchar(max),@b1) +' the number is divisiable by 3'
+ end
+ else
+ begin 
+ print convert(nvarchar(max),@b1)+'  the given number is not divisiable by 3'
+ end
    
    
     
