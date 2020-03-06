@@ -1,0 +1,49 @@
+
+
+---------------------Odd or Even-------
+declare @a int--,@b int
+set @a=25
+--set @b=2
+ if (@a%2=0)
+  begin
+     print 'even'
+  end
+  else
+   begin
+    print 'odd'
+   end
+   
+  --------------------fibbonic------------
+  declare @a int,@b int,@s int,@t int,@n int
+  set @a=0
+  set @b=1
+  set @s=0
+  set @t=5
+  while @s<@t
+   begin
+    print @a
+   set @n=@a+@b
+   set @a=@b
+   set @b=@n
+  
+   set @s=@s+1
+   end
+   
+   ----------------to find number divisible by 2-------------
+   
+   declare @a1 int,@a2 int
+ set @a1=225
+ set @a2=(select right(@a1,1))
+ if (@a2%2=0)
+ begin
+ print 'the given number is divisiable by 2'
+ end
+ else
+ begin 
+ print 'the given number is not divisiable by 2'
+ end
+ 
+ -----------------------
+   
+   
+    
