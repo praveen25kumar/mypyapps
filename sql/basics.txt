@@ -14,11 +14,12 @@ set @a=25
    end
    
   --------------------fibbonic------------
-  declare @a int,@b int,@s int,@t int,@n int
-  set @a=0
-  set @b=1
-  set @s=0
-  set @t=5
+  declare @a int,
+  @b int=0
+  @s int=1
+  @t int=0
+  @n int=5
+  
   while @s<@t
    begin
     print @a
