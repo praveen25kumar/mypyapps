@@ -8,4 +8,4 @@ def dul(s):
       c.append(i)
   return c
   
-PPPPPPP
+
